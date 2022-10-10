@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        text-align: center;
+      }
+      .container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+      .board {
+        border: 1px solid black;
+        padding: 0.5em;
+      }
+      .row {
+        display: flex;
+        gap: 0.5em;
+        margin-bottom: 0.5em;
+      }
+      .cell {
+        width: 6em;
+        height: 6em;
+        border: 1px solid black;
+      }
+      .green {
+        background: green;
+      }
+      .orange {
+        background-color: orange;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <section></section>
+      <div class="board">
+        <div class="row">
+          <div class="cell" data-id="1"></div>
+          <div class="cell" data-id="2"></div>
+          <div class="cell" data-id="3"></div>
+        </div>
+        <div class="row">
+          <div class="cell" data-id="4"></div>
+          <div class="cell" data-id="5"></div>
+          <div class="cell" data-id="6"></div>
+        </div>
+        <div class="row">
+          <div class="cell" data-id="7"></div>
+          <div class="cell" data-id="8"></div>
+          <div class="cell" data-id="9"></div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script>
+    const section = document.getElementsByTagName("section")[0];
+    const numberOfTiles = document.querySelectorAll(".cell").length;
+    const greenTiles = [];
+    const orangeTiles = [];
+    let click = 0;
+
+    const div = document.createElement("div");
+
+    document.addEventListener("click", (event) => {
+      if (!event.target.classList.contains("cell")) return;
+      if (greenTiles.includes(event.target.dataset.id)) return;
+      if (orangeTiles.includes(event.target.dataset.id)) return;
+
+      if (click % 2 == 0) {
+        greenTiles.push(event.target.dataset.id);
+        event.target.classList.add("green");
+
+        if (won(greenTiles)) {
+          const p = document.createElement("p");
+          p.innerText = "green team won!";
+          section.appendChild(p);
+          p.style.fontSize = "2em";
+        }
+      } else {
+        orangeTiles.push(event.target.dataset.id);
+        event.target.classList.add("orange");
+
+        if (won(orangeTiles)) {
+          const p = document.createElement("p");
+          p.innerText = "orange team won!";
+          section.appendChild(p);
+          p.style.fontSize = "2em";
+        }
+      }
+
+      click++;
+
+      if (greenTiles.length + orangeTiles.length >= numberOfTiles) {
+        const p = document.createElement("p");
+        p.innerText = "Its a TIE!";
+        section.appendChild(p);
+        p.style.fontSize = "2em";
+      }
+    });
+
+    function won(array) {
+      const win1 =
+        array.includes("1") && array.includes("2") && array.includes("3");
+      const win2 =
+        array.includes("4") && array.includes("5") && array.includes("6");
+      const win3 =
+        array.includes("7") && array.includes("8") && array.includes("9");
+      const win4 =
+        array.includes("1") && array.includes("5") && array.includes("9");
+      const win5 =
+        array.includes("3") && array.includes("5") && array.includes("7");
+      const win6 =
+        array.includes("1") && array.includes("4") && array.includes("7");
+      const win7 =
+        array.includes("2") && array.includes("5") && array.includes("8");
+      const win8 =
+        array.includes("3") && array.includes("6") && array.includes("9");
+
+      if (win1) return true;
+      if (win2) return true;
+      if (win3) return true;
+      if (win4) return true;
+      if (win5) return true;
+      if (win6) return true;
+      if (win7) return true;
+      if (win8) return true;
+      return false;
+    }
+  </script>
+</html>
